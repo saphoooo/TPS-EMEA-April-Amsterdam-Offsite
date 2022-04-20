@@ -1,0 +1,23 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apache
+spec:
+  minReplicas: 1
+  maxReplicas: 10
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: apache
+  metrics:
+  - type: External
+    external:
+      metric:
+        name: <CHOOSE_THE_BEST_METRIC_TO_SCALE>
+        selector:
+          matchLabels:
+            kube_container_name: apache
+      target:
+        type: AverageValue
+        averageValue: 1000
+
